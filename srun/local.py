@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 #!Design by CHN-STUDENT
-#!Useing on Python 3
+#!Using on Python 3 and Python2.7
 
 from __future__ import absolute_import, division, print_function, \
     with_statement

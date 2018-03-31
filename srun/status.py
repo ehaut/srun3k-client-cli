@@ -1,19 +1,30 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 #!Design by CHN-STUDENT
-#!Useing on Python 3
+#!Using on Python 3 and Python2.7
 
-from srun import common
-from urllib import request,error
+import six
 import logging
 import sys
 
+def to_bytes(s):
+    if bytes != str:
+        if type(s) == str:
+            return s.encode('utf-8')
+    return s
+
+
+def to_str(s):
+    if bytes != str:
+        if type(s) == bytes:
+            return s.decode('utf-8')
+    return s
+
 def GetStatus():
 	try:
-		req = request.Request('http://172.16.154.130/cgi-bin/rad_user_info')
-		with request.urlopen(req) as f:
-			return common.to_str(f.read()) #Byte to string
-	except error.URLError as e:  
+		f = six.moves.urllib.request.urlopen('http://172.16.154.130/cgi-bin/rad_user_info')
+		return to_str(f.read()) #Byte to string
+	except six.moves.urllib.error as e:  
 		logging.error(e)
 		sys.exit(1)
 		

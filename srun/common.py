@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 #!Design by CHN-STUDENT
-#!Useing on Python 3
+#!Using on Python 3 and Python2.7
 
 
 from __future__ import absolute_import, division, print_function, \
@@ -9,7 +9,7 @@ from __future__ import absolute_import, division, print_function, \
 
 import logging	
 from srun.encrypt import username_encrypt,password_encrypt
-from urllib import request, parse
+import six
 from srun import status
 
 def to_bytes(s):
@@ -26,10 +26,10 @@ def to_str(s):
     return s
 
 def login(config):
-	logging.info('Start to login.')
-	username = username_encrypt(config['username'])
-	password = password_encrypt(config['password'])
-	login_data = parse.urlencode([('action','login'),
+    logging.info('Start to login.')
+    username = username_encrypt(config['username'])
+    password = password_encrypt(config['password'])
+    login_data = six.moves.urllib.parse.urlencode([('action','login'),
                               ('username',username),
                               ('password',password),
                               ('drop',config['drop']),
@@ -41,46 +41,45 @@ def login(config):
                               ('ac_id',config['acid']),
                               ('mac',config['mac'])
                               ])
-	try:
-		req = request.Request('http://172.16.154.130:69/cgi-bin/srun_portal')
-		d = to_bytes(login_data)
-		with request.urlopen(req,data=d) as f:
-			response=to_str(f.read())
-			if response.startswith('login_ok'):
-				logging.info('Login successfully!')
-				response = status.GetStatus()
-				user_status = status.CheckStatus(response)
-			elif response == 'login_error#E2553: Password is error.':
-				logging.error('Your password is error.')
-			elif response == 'login_error#E2531: User not found.':
-				logging.error('Can not find your account.')
-			elif response == 'login_error#INFO failed, BAS respond timeout.':
-				logging.error('Acid is error,you need to change it,\n'
-								'                             e.g. # srun-cli -u username -k password -a 2')
-
-	except error.URLError as e:  
-		logging.error(e)
-		sys.exit(1)
-	
+    try:
+        req = 'http://172.16.154.130:69/cgi-bin/srun_portal'
+        d = to_bytes(login_data)
+        f = six.moves.urllib.request.urlopen(req,data=d)
+        response=to_str(f.read())
+        if response.startswith('login_ok'):
+            logging.info('Login successfully!')
+            response = status.GetStatus()
+            user_status = status.CheckStatus(response)
+        elif response == 'login_error#E2553: Password is error.':
+            logging.error('Your password is error.')
+        elif response == 'login_error#E2531: User not found.':
+            logging.error('Can not find your account.')
+        elif response == 'login_error#INFO failed, BAS respond timeout.':
+            logging.error('Acid is error,you need to change it,\n'
+                            '                             e.g. # srun-cli -u username -k password -a 2')
+    except six.moves.urllib.error.URLError as e:  
+        logging.error(e)
+        sys.exit(1)
+    
 def logout(config):
 	logging.info('Start to logout.')
 	username = username_encrypt(config['username'])
-	logout_data = parse.urlencode([('action','logout'),
+	logout_data = six.moves.urllib.parse.urlencode([('action','logout'),
 							  ('username',username),
 							  ('type',config['type']),
 							  ('mac',config['mac']),
 							  ('ac_id',config['acid'])
 							  ])
 	try:
-		req = request.Request('http://172.16.154.130:69/cgi-bin/srun_portal')
+		req = 'http://172.16.154.130:69/cgi-bin/srun_portal'
 		d = to_bytes(logout_data)
-		with request.urlopen(req,data=d) as f:
-			response=to_str(f.read())
-			if response == 'logout_ok':
-				logging.info('Logout successfully!')
-			elif response == 'login_error#You are not online.':
-				logging.warn('You are not online.')
-	except error.URLError as e:  
+		f = six.moves.urllib.request.urlopen(req,data=d)
+		response=to_str(f.read())
+		if response == 'logout_ok':
+			logging.info('Logout successfully!')
+		elif response == 'login_error#You are not online.':
+			logging.warn('You are not online.')
+	except six.moves.urllib.error.URLError as e:  
 		logging.error(e)
 		sys.exit(1)
 	
