@@ -2,7 +2,8 @@
 ### 深澜命令行客户端 
 ----------
 
-## 欢迎使用SRUN3000 命令行版认证客户端 ##
+### 欢迎使用SRUN3000 命令行版认证客户端 ###
+
 之前我研究过Qt版本的SRUN3000认证客户端，由于某个朋友建议希望开发跨平台的版本，所以又有了此项目。
 
 这是本人的第一个Python作品，参考了学长的python版以及某`shadowsocks`的源代码，写的很渣，请轻拍。
@@ -34,7 +35,8 @@ Windows:(If you installed Python,如果您安装Python和pip，环境变量配�
 	pip install srun-cli #For Python2.7
 	pip3 install srun-cli #For Python3
 
-Then you can use it on your command line interface/
+Then you can use it on your command line interface.
+
 您就可以在命令行使用。
 
 ### Usage: ###
