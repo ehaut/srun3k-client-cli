@@ -61,8 +61,8 @@ Create a config file `/etc/srun/config.json`. Example:
 
 ```
 {
-   "username"="201600000000",
-   "password"="yourpassword"	
+   "username":"201600000000",
+   "password":"yourpassword"	
 }
 ```
 Explanation of the fields:
