@@ -26,7 +26,7 @@ def main():
 
 	config = shell.get_config()
 	
-	response = status.GetStatus()
+	response = status.GetStatus(config)
 	user_status = status.CheckStatus(response)
 	if ((user_status == 0) and (config['method'] == 'login' or not config['method'])):
 		common.login(config)

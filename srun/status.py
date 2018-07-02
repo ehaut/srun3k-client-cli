@@ -20,9 +20,11 @@ def to_str(s):
             return s.decode('utf-8')
     return s
 
-def GetStatus():
+def GetStatus(config):
+	server='http://'+config['server_addr']+':'+str(config['server_port'])+'/cgi-bin/rad_user_info'
 	try:
-		f = six.moves.urllib.request.urlopen('http://172.16.154.130/cgi-bin/rad_user_info')
+		#f = six.moves.urllib.request.urlopen('http://172.16.154.130/cgi-bin/rad_user_info')
+		f = six.moves.urllib.request.urlopen(server)
 		return to_str(f.read()) #Byte to string
 	except six.moves.urllib.error as e:  
 		logging.error(e)
@@ -30,7 +32,7 @@ def GetStatus():
 		
 
 def CheckStatus(data):	
-		if (data == 'not_online'): #if user is not online
+		if data.startswith('not_online'): #if user is not online
 			return 0
 		else:		#if user is online
 			output='''

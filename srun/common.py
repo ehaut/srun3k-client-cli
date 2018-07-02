@@ -42,13 +42,14 @@ def login(config):
                               ('mac',config['mac'])
                               ])
     try:
-        req = 'http://172.16.154.130:69/cgi-bin/srun_portal'
+		#req = 'http://172.16.154.130:69/cgi-bin/srun_portal'
+        req ='http://'+config['server_addr']+':'+str(config['server_port'])+'/cgi-bin/srun_portal'
         d = to_bytes(login_data)
         f = six.moves.urllib.request.urlopen(req,data=d)
         response=to_str(f.read())
         if response.startswith('login_ok'):
             logging.info('Login successfully!')
-            response = status.GetStatus()
+            response = status.GetStatus(config)
             user_status = status.CheckStatus(response)
         elif response == 'login_error#E2553: Password is error.':
             logging.error('Your password is error.')
@@ -71,7 +72,8 @@ def logout(config):
 							  ('ac_id',config['acid'])
 							  ])
 	try:
-		req = 'http://172.16.154.130:69/cgi-bin/srun_portal'
+		#req = 'http://172.16.154.130:69/cgi-bin/srun_portal'
+		req ='http://'+config['server_addr']+':'+str(config['server_port'])+'/cgi-bin/srun_portal'
 		d = to_bytes(logout_data)
 		f = six.moves.urllib.request.urlopen(req,data=d)
 		response=to_str(f.read())
